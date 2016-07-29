@@ -1,0 +1,17 @@
+//part 1 top module
+
+module part1(SW,KEY,LEDR);
+input [17:0] SW;
+input [1:0] KEY;
+output [17:0] LEDR;
+
+proc u0(
+            .DIN(SW[15:0]),
+            .Resetn(KEY[0]),
+            .Clock(KEY[1]),
+            .Run(SW[17]),
+            .Done(LEDR[17]),
+            .BusWires(LEDR[15:0])
+            );
+            
+endmodule

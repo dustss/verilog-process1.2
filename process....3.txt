@@ -1,0 +1,43 @@
+//part 2 top module
+//加上外部存储器的处理器
+
+//引脚说明：
+//--------------------------------------------------------
+// SW17-Run    KEY0-Resetn        KEY1-MClock
+// KEY2-PClock    LEDR15-0-BusWires    LEDR17-Done
+
+module part2(
+                        input [2:0] KEY,
+                        input [17:17] SW,
+                        output [17:0] LEDR
+                        );
+                        
+                        wire Done,Resetn,PClock,MClock,Run;
+                        wire [15:0] DIN,BusWires;
+                        wire [4:0] pc;        //计数输出，srom的地址0-31
+                        
+                        assign Resetn=KEY[0];
+                        assign PClock=KEY[0];    //processor的时钟
+                        assign MClock=KEY[2];    //srom的时钟
+                        assign Run=SW[17];
+                        
+                        proc m0(DIN,Resetn,PClock,Run,Done,Buswires);
+                        assign LEDR[15:0] =BusWires;
+                        assign LEDR[17]=Done;
+                        
+                        sromlpm m1(pc,MClock,DIN);
+                        count5 m2(Resetn,MClock,pc);
+                        
+endmodule
+
+//count5
+module count5(Resetn,Clock,Q);
+input Resetn,Clock;
+output reg [4:0] Q;
+
+always @(posedge Clock)
+    if(Resetn==0)
+        Q<=5'b0;
+    else
+        Q<=Q+1'b1;
+endmodule
